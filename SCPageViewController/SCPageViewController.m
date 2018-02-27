@@ -232,6 +232,22 @@
     if([self.dataSource respondsToSelector:@selector(initialPageInPageViewController:)]) {
         self.initialPageIndex = @([self.dataSource initialPageInPageViewController:self]);
         self.currentPage = self.initialPageIndex.unsignedIntegerValue;
+        
+        
+        /*
+         * Bug:-
+         * when call this method after viewDidAppear, page change through swipe doesn't allow to change more than one page.
+         *
+         * Reason:-
+         * when ever page change the scroll view inset have to recalculate and set.(it is depend on the currentPage)
+         * but current page is update only if self.initialPageIndex not avilable.(in  "_tilePages" method).
+         *
+         * Solution:-
+         * so we can solve this issue by setting self.initialPageIndex as nil(if self.isViewVisible == YES).
+         */
+        if (self.isViewVisible) {
+            self.initialPageIndex = nil;
+        }
     }
     
     [self.pages enumerateObjectsUsingBlock:^(id obj, NSUInteger pageIndex, BOOL *stop) {
