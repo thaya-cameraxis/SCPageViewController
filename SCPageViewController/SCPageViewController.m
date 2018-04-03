@@ -674,6 +674,14 @@
 
 #pragma mark - UIScrollViewDelegate
 
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    
+    if (scrollView.isDecelerating) {
+        [scrollView setContentOffset:scrollView.contentOffset animated:YES];
+    }
+    
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if([self.layouter respondsToSelector:@selector(pageViewController:didNavigateToOffset:)]) {
